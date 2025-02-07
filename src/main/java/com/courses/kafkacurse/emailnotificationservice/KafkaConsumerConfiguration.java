@@ -1,6 +1,7 @@
 package com.courses.kafkacurse.emailnotificationservice;
 
 import com.courses.kafkacurse.emailnotificationservice.exceptions.NotRetryableException;
+import com.courses.kafkacurse.emailnotificationservice.exceptions.RetryableException;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -16,6 +17,7 @@ import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.util.backoff.FixedBackOff;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -45,10 +47,14 @@ public class KafkaConsumerConfiguration {
     @Bean
     ConcurrentKafkaListenerContainerFactory<String,Object> kafkaListenerContainerFactory(
             ConsumerFactory<String,Object> consumerFactory, KafkaTemplate<String, Object> kafkaTemplate){
-
-        DefaultErrorHandler errorHandler = new DefaultErrorHandler(new DeadLetterPublishingRecoverer((kafkaTemplate))); // To publish messages in the DLT when an error occurs
-        //Registering Retryable and Not Retryable exceptions in the error Handler
+        // To publish messages in the DLT when an error occurs
+        // With interval number of retries
+        DefaultErrorHandler errorHandler = new DefaultErrorHandler(new DeadLetterPublishingRecoverer((kafkaTemplate)),
+                new FixedBackOff(5000,3));
+        //Registering  Not Retryable and Retryable exceptions in the error Handler
         errorHandler.addNotRetryableExceptions(NotRetryableException.class);
+        errorHandler.addRetryableExceptions(RetryableException.class);
+
 
         ConcurrentKafkaListenerContainerFactory<String,Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
