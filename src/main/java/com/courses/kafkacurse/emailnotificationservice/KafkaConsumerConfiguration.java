@@ -1,5 +1,6 @@
 package com.courses.kafkacurse.emailnotificationservice;
 
+import com.courses.kafkacurse.emailnotificationservice.exceptions.NotRetryableException;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -46,6 +47,8 @@ public class KafkaConsumerConfiguration {
             ConsumerFactory<String,Object> consumerFactory, KafkaTemplate<String, Object> kafkaTemplate){
 
         DefaultErrorHandler errorHandler = new DefaultErrorHandler(new DeadLetterPublishingRecoverer((kafkaTemplate))); // To publish messages in the DLT when an error occurs
+        //Registering Retryable and Not Retryable exceptions in the error Handler
+        errorHandler.addNotRetryableExceptions(NotRetryableException.class);
 
         ConcurrentKafkaListenerContainerFactory<String,Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
