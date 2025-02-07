@@ -26,3 +26,16 @@ The convention for the DLT name is the following, only adding a "DLT" at the end
 Example of command to see the messages in the DLT:
 
 `./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic product-created-events-topic-dlt --from-beginning --property print.key=true --property print.value=true`
+
+
+## Three ways to configure a CONSUMER GROUP
+
+1. In the Kafka Listener
+`@KafkaListener(topics="product-created-events-topic", groupId = "product-created-events") //For Consumer Groups`
+
+2. In the Kafka Consumer Configuration class.
+   * ConsumerFactory method, ConsumerConfig parameter.
+   * `configuration.put(ConsumerConfig.GROUP_ID_CONFIG, environment.getProperty("spring.kafka.consumer.group-id"));`
+
+3. From the .properties file
+`spring.kafka.consumer.group-id=product-created-events` 

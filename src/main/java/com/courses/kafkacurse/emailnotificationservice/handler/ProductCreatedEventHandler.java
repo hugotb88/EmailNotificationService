@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 // This annotation can be used in classes or method intended to work as target to new coming Kafka messages
 // For multiple topics -> (topics={"topic1", "topic2"})
+//@KafkaListener(topics="product-created-events-topic", groupId = "product-created-events") //For Consumer Groups
 @KafkaListener(topics="product-created-events-topic")
 public class ProductCreatedEventHandler {
 
