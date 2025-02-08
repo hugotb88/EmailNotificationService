@@ -30,6 +30,11 @@ Example of command to see the messages in the DLT:
 
 ## Three ways to configure a CONSUMER GROUP
 
+Remember that to scale an app, you should not create more consumer instances than partition instances.
+
+Number of Consumers <= Number of partitions in your topic. \
+Other way the extra instances will be `_idle_`
+
 1. In the Kafka Listener
 `@KafkaListener(topics="product-created-events-topic", groupId = "product-created-events") //For Consumer Groups`
 
@@ -38,4 +43,10 @@ Example of command to see the messages in the DLT:
    * `configuration.put(ConsumerConfig.GROUP_ID_CONFIG, environment.getProperty("spring.kafka.consumer.group-id"));`
 
 3. From the .properties file
-`spring.kafka.consumer.group-id=product-created-events` 
+`spring.kafka.consumer.group-id=product-created-events`
+
+One way to confirm that each instance is assigned to a partition is in the console when we start the application.
+(Re balancing)
+
+you will see something like this:
+`2025-02-07T14:33:19.207-06:00  INFO 4532 --- [EmailNotificationService] [ntainer#0-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : product-created-events: partitions assigned: [product-created-events-topic-0]`
