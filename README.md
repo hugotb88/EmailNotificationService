@@ -1,6 +1,16 @@
 # ProductsRepository
 Spring Boot microservice of a Kafka Consumer for learning purposes.
 
+## Proyects related
+Producer\
+[Producer Repository]([https://www.example.com](https://github.com/hugotb88/ProductsRepository))
+
+Consumer\
+[Consumer Repository](https://github.com/hugotb88/EmailNotificationService)
+
+Core Library\
+[Core Library](https://github.com/hugotb88/coreKafkaLibrary)
+
 ### Configurations
 Take a look into `KafkaConsumerConfiguration` and `application.properties` to see how the Consumer was configured
 
