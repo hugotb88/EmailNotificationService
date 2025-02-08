@@ -50,3 +50,14 @@ One way to confirm that each instance is assigned to a partition is in the conso
 
 you will see something like this:
 `2025-02-07T14:33:19.207-06:00  INFO 4532 --- [EmailNotificationService] [ntainer#0-0-C-1] o.s.k.l.KafkaMessageListenerContainer    : product-created-events: partitions assigned: [product-created-events-topic-0]`
+
+
+## Idempotent Consumer
+Its a consumer that only consumes a message only once, then avoid duplicated information annd inconsistencies. \
+
+To avoid duplicated information we can consider to configure:
+* Idempotent Producer
+* Idempotent Consumer
+* Transactions (If something in the middle of the transactions fails, we can abort all the operations related to that transaction)
+
+
