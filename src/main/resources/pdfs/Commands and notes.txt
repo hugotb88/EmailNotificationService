@@ -1,0 +1,54 @@
+# All this commands are inside of the docker container that is running Kafka
+# And inside of the kafka/bin folder 
+
+## Create a new topic
+./kafka-topics.sh --create --topic <topic_name> --<server_name> <hostname>:<port>
+
+Example
+./kafka-topics.sh --create --topic test-topic --bootstrap-server host.docker.internal:9092
+
+## With partitions, replication factor and server
+./kafka-topics.sh --create --topic <topic_name> --partitions <number_of_partitions>  --replication-factor 3 --bootstrap-server host.docker.internal:9092,host.docker.internal:9094
+    Number of partitions should be equal or more that the number of consumers that will use the partition.
+
+Example
+./kafka-topics.sh  --create --topic topic2 --partitions 3 --replication-factor 3 --bootstrap-server host.docker.internal:9092,host.docker.internal:9094
+
+
+
+# List Kafka topics
+./kafka-topics.sh --list --bootstrap-server host.docker.internal:9092
+
+
+## Using the terminal instead of Docker desktop exec
+## Be sure that you are where the docker-compose file is stored
+
+docker-compose exec kafka-1 /opt/bitnami/kafka/bin/kafka-topics.sh --list --bootstrap-server host.docker.internal:9092
+
+
+## To access to a docker container from my terminal
+docker exec -it <container_id> <shell_executable>
+
+docker exec -it 80337e084e85612fa02e743b3cac309f8c87668a5b6ef51f4695ca918b927954 /bin/bash
+
+C:\Users\Hugo\proyectos\Kafka\docker-compose\volumes\server-1:/bitnami/kafka 
+
+
+# Kafka Producer CLI
+./kafka-console-producer.sh
+
+The main use is to send a mesage to a specific Kafka topic.
+- with key
+- without key
+- multiple from a file 
+
+By default, Kafka create topics if they not exist when we send a message. The first time it will return an error, but the topic will be created.
+That feature can be disabled.
+
+# To send messages without a key
+./kafka-console-producer.sh --bootstrap-server host.docker.internal:9092 --topic topicHugo
+
+# To send message with key/value combination
+./kafka-console-producer.sh --bootstrap-server host.docker.internal:9092 --topic topicHugo --property "parse.key=true" --property "key.separator=:"
+
+Separator can be whatever you want 

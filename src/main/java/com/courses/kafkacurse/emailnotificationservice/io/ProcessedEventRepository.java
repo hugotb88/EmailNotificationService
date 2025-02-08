@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 Interface to use JPA operations
  */
 @Repository
-public interface ProcessedEventRepository extends JpaRepository<ProcessedEventRepository, Long> {
+public interface ProcessedEventRepository extends JpaRepository<ProcessedEventEntity, Long> {
+
+    ProcessedEventEntity findByMessageId(String messageId);
 }
