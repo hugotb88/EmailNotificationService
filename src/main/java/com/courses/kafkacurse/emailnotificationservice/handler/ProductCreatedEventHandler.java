@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
@@ -31,8 +34,10 @@ public class ProductCreatedEventHandler {
     }
 
     @KafkaHandler
-    public void handler(ProductCreatedEvent productCreatedEvent){
-        LOGGER.info("Received a new Event: " + productCreatedEvent.getTitle());
+    public void handler(@Payload ProductCreatedEvent productCreatedEvent,
+                        @Header(value="messageId", required = true) String messageId,
+                        @Header(KafkaHeaders.RECEIVED_KEY) String messageKey){
+        LOGGER.info("Received a new Event: " + productCreatedEvent.getTitle() + " with productId: " + productCreatedEvent.getProductId());
 
         String requestUrl = "http://localhost:8082/response/200"; // We need a mock service apart running to be able to test this
 
