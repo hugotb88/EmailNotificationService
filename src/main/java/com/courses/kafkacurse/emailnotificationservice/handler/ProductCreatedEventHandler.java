@@ -41,7 +41,7 @@ public class ProductCreatedEventHandler {
 
     @Transactional
     @KafkaHandler
-    public void handler(@Payload ProductCreatedEvent productCreatedEvent,
+    public void handle(@Payload ProductCreatedEvent productCreatedEvent,
                         @Header(value="messageId", required = true) String messageId,
                         @Header(KafkaHeaders.RECEIVED_KEY) String messageKey){
         LOGGER.info("Received a new Event: " + productCreatedEvent.getTitle() + " with productId: " + productCreatedEvent.getProductId());
